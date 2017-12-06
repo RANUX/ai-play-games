@@ -16,3 +16,7 @@ source .venv/bin/activate
 cd trex/
 python3 game.py
 ```
+Exit from virtualenv
+```bash
+deactivate
+```

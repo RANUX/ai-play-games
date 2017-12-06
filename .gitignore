@@ -9,4 +9,5 @@ env
 *.egg-info
 .coverage
 .vscode
+.venv
 __pycache__
