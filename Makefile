@@ -1,7 +1,6 @@
 venv:
-	pip install --upgrade virtualenv
 	rm -rf .venv
-	virtualenv -p python3 .venv
+	python3 -m venv .venv
 	( \
 	source .venv/bin/activate; \
 	python -m pip install --upgrade pip; \

@@ -13,6 +13,6 @@ make
 # Run TRex
 ```bash
 source .venv/bin/activate
-cd trex
+cd trex/
 python3 game.py
 ```
