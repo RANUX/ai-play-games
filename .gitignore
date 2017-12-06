@@ -1,0 +1,12 @@
+MANIFEST
+build
+dist
+doc/build
+doc/tutorial
+env
+*.pyc
+*.egg
+*.egg-info
+.coverage
+.vscode
+__pycache__

@@ -1,0 +1,5 @@
+numpy
+scipy
+cloudpickle
+pygame==1.9.3
+-e git+https://github.com/caseman/noise.git#egg=noise
