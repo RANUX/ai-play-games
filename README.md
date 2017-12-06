@@ -6,6 +6,7 @@ This repo is my personal experimental research in AI field.
 
 # Prerequirements
 Install Python 3.
+
 Linux:
 ```bash
 apt-get install python3
