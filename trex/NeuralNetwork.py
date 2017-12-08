@@ -100,7 +100,7 @@ def loadData(fileName):
 def trainNN():
   train_data_list = loadData("jumpDataTrain.csv")
 
-  epochs = 5
+  epochs = 7
   for e in range(epochs):
     sh_train_data_list = random.sample(train_data_list, len(train_data_list))
     for record in sh_train_data_list:
@@ -109,10 +109,10 @@ def trainNN():
         # scale and shift the inputs
         inputs = numpy.asfarray(all_values[1:])
         # normalize values
-        inputs[0] = inputs[0] / WIN_WIDTH + 0.01
-        inputs[1] = inputs[1] / OBSTACLE_INITSPEED - 0.01
-        inputs[2] = inputs[2] / OBSTACLE_MAXSIZE + 0.01
-        targets = numpy.asfarray(all_values[0]) * 0.98 + 0.01
+        inputs[0] = inputs[0] / WIN_WIDTH + 0.01              # distance to obstacle
+        inputs[1] = inputs[1] / OBSTACLE_INITSPEED - 0.01     # obstacle speed
+        inputs[2] = inputs[2] / OBSTACLE_MAXSIZE + 0.01       # obstacle size
+        targets = numpy.asfarray(all_values[0]) * 0.98 + 0.01 # target train value [0] or [1]
         n.train(inputs, targets)
 
 

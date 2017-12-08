@@ -14,8 +14,9 @@ class Trex:
   def jump(self):
     self.yVelocity = -(self.radius * 0.7)
 
-  def draw(self):
-    pygame.draw.ellipse(self.screen,WHITE,[self.x, self.y, self.radius, self.radius],2)
+  def draw(self, image):
+    self.screen.blit(image, (self.x-self.radius, self.y-self.radius))
+    #pygame.draw.ellipse(self.screen,WHITE,[self.x, self.y, self.radius, self.radius],2)
 
   def update(self, platform):
     bottom = self.y + self.radius*2        # bottom pixel of circle

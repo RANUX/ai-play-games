@@ -9,6 +9,7 @@ from obstacle import *
 import noise
 import numpy
 import pickle
+from spritesheets import *
 
 # constants
 WIN_WIDTH = 800
@@ -37,11 +38,22 @@ font = None
 dumpObstacleData = True
 nn = None
 
+# sprites
+sp_n = 0
+FPS = 120
+frames = FPS / 12
+strips = []
+image = None
+
 def setup():
-    global clock, screen, bg, horizon, dino, font, nn
+    global clock, screen, bg, horizon, dino, font, nn, strips, image
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(DISPLAY)
+    strips.append(SpriteStripAnim('./assets/200-offline-sprite.png', (927,0,44,54), 2, 0, True, frames))
+    strips.append(SpriteStripAnim('./assets/200-offline-sprite.png', (1015,0,44,54), 1, 0, False, frames))
+    strips[sp_n].iter()
+    image = strips[sp_n].next()
     font = pygame.font.Font(None, 30)
     pygame.display.set_caption("T-Rex game")
     bg = Surface((WIN_WIDTH,WIN_HEIGHT))
@@ -55,18 +67,19 @@ def setup():
         nn = pickle.load(open( "nn.bin", "rb" ))
 
 def restart():
-  global gameOver, obstacles, obstacleSpeed, score
+  global gameOver, obstacles, obstacleSpeed, score, sp_n
   gameOver = False
   obstacleSpeed = OBSTACLE_INITSPEED
   obstacles = []
   score = 0
+  sp_n = 0
 
 def drawHorizon():
     pygame.draw.line(screen, WHITE, [0, horizon], [WIN_WIDTH, horizon], 2)
 
 
 def handleLevel():
-    global obstacleSpeed, score
+    global obstacleSpeed, score, strips, image
 
     if frameCount % (math.floor(obstacleSpeed)*9) == 0:
       rnd = noise.pnoise1(random.randint(1, math.floor((frameCount*3)/4))/frameCount)
@@ -85,7 +98,7 @@ def handleLevel():
       score += 1
 
 def handleObstacles():
-    global gameOver
+    global gameOver, sp_n
     for obstacle in obstacles:
       obstacle.draw()
 
@@ -93,7 +106,9 @@ def handleObstacles():
         obstacle.update(obstacleSpeed)
 
         if (obstacle.hits(dino)):
+          sp_n = 1
           gameOver = True
+
 
         if not obstacle.onScreen:
           obstacles.pop()
@@ -127,7 +142,7 @@ def drawHUD():
       screen.blit(restrtText, [(WIN_WIDTH-restrtText.get_width())/2, WIN_HEIGHT/3+10])
 
 def update():
-    global frameCount, gameOver
+    global frameCount, gameOver, image
 
     for e in pygame.event.get():
       if e.type == QUIT:
@@ -148,7 +163,7 @@ def update():
         if output > 0.7 and dino.onGround:
             dino.jump()
 
-    clock.tick()
+    clock.tick(FPS)
     frameCount += 1
 
     screen.blit(bg, (0,0))
@@ -158,9 +173,12 @@ def update():
     if not gameOver:
       dino.update(horizon)
     
-    dino.draw()
+    dino.draw(image)
     drawHUD()
-    
+    try:
+      image = strips[sp_n].next()
+    except StopIteration:
+      pass
 
 def main():
     setup()
@@ -168,6 +186,7 @@ def main():
     while 1:
       update()
       pygame.display.update()
+      
 
 if __name__ == "__main__":
     main()
